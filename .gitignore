@@ -1,3 +1,7 @@
+node_modules
+.wrangler
+.dev.vars
+
 Website/
 logo/
 _prepare-site.js

@@ -1,0 +1,28 @@
+# Photographs and video stay in R2. Keep them out of the Worker upload
+# if a copy is placed in this folder.
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.webp
+*.svg
+*.ico
+*.bmp
+*.tif
+*.tiff
+*.heic
+*.heif
+*.avif
+*.mp4
+*.MP4
+*.webm
+*.mov
+*.avi
+*.mkv
+*.m4v
+*.wmv
+*.mpeg
+*.mpg
+*.pdf
+*.ai
+*.md
