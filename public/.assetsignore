@@ -26,3 +26,8 @@
 *.pdf
 *.ai
 *.md
+
+# Couple galleries served with the site
+!assets/couples/rami-cyrine/**
+!assets/couples/rami-cyrine/*.jpg
+!assets/couples/rami-cyrine/*.mp4
