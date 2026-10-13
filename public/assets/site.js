@@ -42,12 +42,46 @@ document.addEventListener(
   true
 );
 
+function inquiryContactOk(value) {
+  var text = String(value || "").trim();
+  if (!text || text.length > 200) return false;
+  if (text.indexOf("@") !== -1) return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(text);
+  var number = text.replace(/[\s().-]/g, "");
+  if (number.indexOf("00") === 0) number = "+" + number.slice(2);
+  if (/^[2-9]\d{7}$/.test(number) || /^216[2-9]\d{7}$/.test(number)) return true;
+  if (number.indexOf("+216") === 0) return /^\+216[2-9]\d{7}$/.test(number);
+  return /^\+[1-9]\d{6,14}$/.test(number);
+}
+
+function inquiryField(form, name) {
+  var input = form.elements[name];
+  return input && "value" in input ? String(input.value) : "";
+}
+
+document.addEventListener(
+  "input",
+  function (event) {
+    var input = event.target;
+    if (input && input.id === "Client-E-Mail") input.setCustomValidity("");
+  },
+  true
+);
+
 document.addEventListener(
   "submit",
   function (event) {
     var form = event.target;
     if (!form || !form.classList || !form.classList.contains("form")) return;
-    if (!form.checkValidity()) return;
+    var contact = form.querySelector("#Client-E-Mail");
+    if (contact) {
+      contact.setCustomValidity(inquiryContactOk(contact.value) ? "" : "Enter an email or a phone number.");
+    }
+    if (!form.checkValidity()) {
+      event.preventDefault();
+      event.stopPropagation();
+      if (typeof form.reportValidity === "function") form.reportValidity();
+      return;
+    }
     event.preventDefault();
     event.stopPropagation();
 
@@ -55,9 +89,41 @@ document.addEventListener(
     if (!block) return;
     var done = block.querySelector(".w-form-done");
     var fail = block.querySelector(".w-form-fail");
-    form.style.display = "none";
+    var button = form.querySelector(".submit-button");
+    var previous = button ? button.value : "";
+    if (button) {
+      button.disabled = true;
+      button.value = button.getAttribute("data-wait") || "Please wait...";
+    }
     if (fail) fail.style.display = "none";
-    if (done) done.style.display = "block";
+
+    fetch(form.getAttribute("data-crm") || "https://yesser-crm.vercel.app/api/inquiries", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: inquiryField(form, "Client-Name"),
+        instagram: inquiryField(form, "Client-Instagram"),
+        wedding_date: inquiryField(form, "Wedding-Date"),
+        venue: inquiryField(form, "Wedding-Venue"),
+        guests: inquiryField(form, "Guest-Number"),
+        planner: inquiryField(form, "Wedding-Planner-Name"),
+        found_on: inquiryField(form, "Where-They-Found-Us"),
+        contact: contact ? contact.value : "",
+        fax: inquiryField(form, "fax"),
+      }),
+    })
+      .then(function (response) {
+        if (!response.ok) throw new Error("inquiry");
+        form.style.display = "none";
+        if (done) done.style.display = "block";
+      })
+      .catch(function () {
+        if (button) {
+          button.disabled = false;
+          button.value = previous;
+        }
+        if (fail) fail.style.display = "block";
+      });
   },
   true
 );
