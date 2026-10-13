@@ -1,6 +1,19 @@
 # Photographs and video stay in R2. Keep them out of the Worker upload
 # if a copy is placed in this folder.
 *.jpg
+# Story galleries for the replaced couples are served with the site.
+!assets/couples/**/*.jpg
+# Home hero slideshow.
+!assets/home/hero/header.jpg
+!assets/home/hero/chayma-sami.jpg
+!assets/home/hero/laura-yosri.jpg
+!assets/home/hero/rami-cyrine.jpg
+# Homepage story photos.
+!assets/home/p02.jpg
+!assets/home/p13.jpg
+!assets/home/p14.jpg
+!assets/home/p24.jpg
+!assets/home/p27.jpg
 *.jpeg
 *.png
 *.gif
@@ -26,8 +39,3 @@
 *.pdf
 *.ai
 *.md
-
-# Couple galleries served with the site
-!assets/couples/rami-cyrine/**
-!assets/couples/rami-cyrine/*.jpg
-!assets/couples/rami-cyrine/*.mp4
