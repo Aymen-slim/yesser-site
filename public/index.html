@@ -18,9 +18,9 @@ html.lenis {
 <style>
 .yb-logo{display:block;width:auto;height:auto}.yb-logo-nav{height:2.4rem}.yb-logo-preloader{height:8.5rem;max-width:min(72vw,26rem)}.yb-logo-footer{height:6rem;max-width:min(26vw,15rem);margin:1.25rem auto}img.signature.yb-logo-sign{width:11rem;height:auto;max-width:none}@media (max-width:767px){.yb-logo-nav{height:1.9rem}.yb-logo-preloader{height:5.5rem}.yb-logo-footer{height:4.25rem;max-width:11rem}}
 .signature.yb-sign{font-style:italic;letter-spacing:.06em;text-transform:none;font-size:1.65rem;font-weight:400}.home-header_title-wrapper .heading-h1-display.padding-global{font-size:clamp(1.15rem,4.6vw,4.6rem);letter-spacing:-.02em;white-space:nowrap;max-width:100%}.home-header_content-wrapper{position:relative;isolation:isolate;min-height:100svh;background-image:none;background-color:#161311}
-.section-home-header.padding-bottom.padding-section-large{height:400svh!important;padding-bottom:0!important;overflow:visible}
-.home-header_content-wrapper{position:sticky;top:0;height:100svh!important;min-height:100svh;overflow:hidden}
-.home-hero{position:absolute;inset:0;z-index:0;overflow:hidden}
+.section-home-header.padding-bottom.padding-section-large{height:110svh!important;padding-bottom:4rem!important;overflow:visible}
+.home-header_content-wrapper{position:relative!important;top:auto;height:100%!important;overflow:hidden;touch-action:pan-y}
+.home-hero{position:absolute;inset:0;z-index:0;overflow:hidden;touch-action:pan-y}
 .home-hero_slide{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;z-index:0;transition:opacity .7s ease}
 .home-hero_slide.is-active{opacity:1;z-index:1}
 .home-hero_slide.is-header{object-position:50% 62%}
@@ -34,7 +34,8 @@ html.lenis {
 .home-hero_meter span{position:relative;flex:1;height:2px;overflow:hidden;background:rgba(255,255,255,.38)}
 .home-hero_meter span::after{content:"";position:absolute;inset:0 auto 0 0;width:0;background:#fff}
 .home-hero_meter span.is-done::after{width:100%}
-.home-hero_meter span.is-active::after{width:calc(var(--meter, 0) * 100%)}
+.home-hero_meter span.is-active::after{animation:homeHeroMeter 3s linear forwards}
+@keyframes homeHeroMeter{from{width:0}to{width:100%}}
 @media (max-width:767px){
 .home-hero_slide.is-header{object-position:50% 46%}
 .home-hero_slide.is-chayma{object-position:50% 38%}
@@ -43,9 +44,7 @@ html.lenis {
 .home-hero_meter{bottom:1rem}
 }
 @media (prefers-reduced-motion:reduce){
-.section-home-header.padding-bottom.padding-section-large{height:110svh!important}
-.home-header_content-wrapper{position:relative;height:100%!important}
-.home-hero_slide{transition:none}
+.home-hero_slide,.home-hero_meter span::after{animation:none!important;transition:none}
 .home-hero_meter{display:none}
 }
 .videozoom{width:22rem;height:39.1rem;overflow:hidden}.videozoom video{object-fit:cover}

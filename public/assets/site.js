@@ -63,50 +63,111 @@ document.addEventListener(
 );
 
 (function () {
-  var section = document.querySelector(".section-home-header");
   var hero = document.querySelector(".home-hero");
-  if (!section || !hero) return;
+  var wrap = document.querySelector(".home-header_content-wrapper");
+  if (!hero || !wrap) return;
   var slides = Array.prototype.slice.call(hero.querySelectorAll(".home-hero_slide"));
   var meters = Array.prototype.slice.call(hero.querySelectorAll(".home-hero_meter span"));
   if (slides.length < 2) return;
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-  var pending = false;
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var index = 0;
+  var timer = null;
+  var delay = 3000;
+  var started = false;
+  var origin = null;
+  var swiped = false;
 
-  function show(index, part) {
+  function show(next) {
+    index = (next + slides.length) % slides.length;
     slides.forEach(function (slide, i) {
       slide.classList.toggle("is-active", i === index);
     });
     meters.forEach(function (meter, i) {
       meter.classList.toggle("is-done", i < index);
-      meter.classList.toggle("is-active", i === index);
-      if (i === index) meter.style.setProperty("--meter", String(part));
-      else meter.style.removeProperty("--meter");
+      meter.classList.remove("is-active");
     });
+    var current = meters[index];
+    if (current && !reduce) {
+      void current.offsetWidth;
+      current.classList.add("is-active");
+    }
   }
 
-  function frame() {
-    pending = false;
-    var rect = section.getBoundingClientRect();
-    var scrollable = section.offsetHeight - window.innerHeight;
-    var scrolled = -rect.top;
-    if (scrolled < 0) scrolled = 0;
-    if (scrollable > 0 && scrolled > scrollable) scrolled = scrollable;
-    var progress = scrollable > 0 ? scrolled / scrollable : 0;
-    var scaled = progress * slides.length;
-    var index = Math.min(slides.length - 1, Math.floor(scaled));
-    var part = scaled - index;
-    if (progress >= 1) part = 1;
-    show(index, part);
+  function arm() {
+    if (timer) clearTimeout(timer);
+    timer = null;
+    if (reduce || document.hidden || !started) return;
+    timer = setTimeout(function () {
+      show(index + 1);
+      arm();
+    }, delay);
   }
 
-  function queue() {
-    if (pending) return;
-    pending = true;
-    requestAnimationFrame(frame);
+  function step(direction) {
+    show(index + direction);
+    arm();
   }
 
-  window.addEventListener("scroll", queue, { passive: true });
-  window.addEventListener("resize", queue);
-  queue();
+  wrap.addEventListener("pointerdown", function (event) {
+    if (event.pointerType === "mouse" && event.button !== 0) return;
+    origin = { x: event.clientX, y: event.clientY, id: event.pointerId };
+    swiped = false;
+  });
+
+  function finishSwipe(event) {
+    if (!origin || origin.id !== event.pointerId) return;
+    var dx = event.clientX - origin.x;
+    var dy = event.clientY - origin.y;
+    origin = null;
+    if (Math.abs(dx) < 42 || Math.abs(dx) < Math.abs(dy) * 1.15) return;
+    swiped = true;
+    step(dx < 0 ? 1 : -1);
+  }
+
+  wrap.addEventListener("pointerup", finishSwipe);
+  wrap.addEventListener("pointercancel", function () {
+    origin = null;
+  });
+  wrap.addEventListener(
+    "click",
+    function (event) {
+      if (!swiped) return;
+      swiped = false;
+      event.preventDefault();
+      event.stopPropagation();
+    },
+    true
+  );
+
+  document.addEventListener("visibilitychange", function () {
+    if (!started) return;
+    if (document.hidden) {
+      if (timer) clearTimeout(timer);
+      timer = null;
+    } else {
+      arm();
+    }
+  });
+
+  var waits = 0;
+  function boot() {
+    var pre = document.querySelector(".preloader-container");
+    var gone = !pre;
+    if (pre) {
+      var style = getComputedStyle(pre);
+      var box = pre.getBoundingClientRect();
+      gone = style.display === "none" || style.visibility === "hidden" || parseFloat(style.opacity) < 0.05 || box.height < 2 || box.bottom < 0;
+    }
+    if (gone || waits > 24) {
+      started = true;
+      show(0);
+      arm();
+    } else {
+      waits += 1;
+      setTimeout(boot, 250);
+    }
+  }
+
+  boot();
 })();
