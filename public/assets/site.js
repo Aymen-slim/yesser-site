@@ -5,14 +5,15 @@ photoStyle.textContent = [
   ".project-template-hero-image-wrapper,.project-image-wrapper,.project-image-wrapper-2,",
   ".portfolio-grid-photo,.image-24,.image-48,img{",
   "background-color:transparent!important}",
-  "img.extra-small,img.small,img.medium,img.big,img.image-48,img.image-50,img.image-36,img.image-11{",
+  "img.extra-small,img.small,img.medium,img.big,img.image-48,img.image-50,img.image-11{",
   "object-fit:contain!important;aspect-ratio:auto!important;width:auto!important;height:auto!important;max-width:100%!important}",
   "img.extra-small{max-height:26svw!important}",
   "img.small{max-height:35svw!important}",
   "img.medium{max-height:44svw!important}",
   "img.big{max-height:100vh!important}",
-  "img.image-48,img.image-36{max-height:100svh!important}",
-  "img.image-11{width:100%!important;height:auto!important;max-height:none!important}"
+  "img.image-48{max-height:100svh!important}",
+  "img.image-11{width:100%!important;height:auto!important;max-height:none!important}",
+  "img.image-36{width:8.5rem!important;max-width:24vw!important;height:auto!important;max-height:16rem!important;object-fit:contain!important;aspect-ratio:auto!important}"
 ].join("");
 document.head.appendChild(photoStyle);
 
