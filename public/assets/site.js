@@ -18,16 +18,38 @@ photoStyle.textContent = [
 document.head.appendChild(photoStyle);
 
 (function () {
-  var kicker = document.querySelector("h1.home-local-kicker");
-  var lead = document.querySelector(".home-header_title-wrapper .heading-h1-display:not(h1)");
-  if (!kicker || !lead) return;
-  var frames = 0;
-  function sync() {
-    kicker.style.opacity = getComputedStyle(lead).opacity;
-    frames += 1;
-    if (frames < 720) requestAnimationFrame(sync);
+  var hero = document.querySelector(".home-hero_slide.is-header");
+  var header = document.querySelector(".home-header_content-wrapper");
+  if (!hero || !header) return;
+  var shown = false;
+  function reveal() {
+    if (shown) return;
+    shown = true;
+    setTimeout(function () {
+      header.classList.add("is-ready");
+    }, 300);
   }
-  requestAnimationFrame(sync);
+  function preloaderGone() {
+    var pre = document.querySelector(".preloader-container");
+    if (!pre) return true;
+    var style = getComputedStyle(pre);
+    if (style.display === "none" || style.visibility === "hidden") return true;
+    if (parseFloat(style.opacity) < 0.05) return true;
+    return pre.getBoundingClientRect().height < 8;
+  }
+  function ready() {
+    if (!(hero.complete && hero.naturalWidth)) return;
+    if (preloaderGone()) reveal();
+  }
+  hero.addEventListener("load", ready, { once: true });
+  var frames = 0;
+  function watch() {
+    ready();
+    frames += 1;
+    if (!shown && frames < 600) requestAnimationFrame(watch);
+  }
+  requestAnimationFrame(watch);
+  setTimeout(reveal, 4500);
 })();
 
 function clearPlaceholderBackgrounds() {
