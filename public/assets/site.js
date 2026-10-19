@@ -17,6 +17,19 @@ photoStyle.textContent = [
 ].join("");
 document.head.appendChild(photoStyle);
 
+(function () {
+  var kicker = document.querySelector("h1.home-local-kicker");
+  var lead = document.querySelector(".home-header_title-wrapper .heading-h1-display:not(h1)");
+  if (!kicker || !lead) return;
+  var frames = 0;
+  function sync() {
+    kicker.style.opacity = getComputedStyle(lead).opacity;
+    frames += 1;
+    if (frames < 720) requestAnimationFrame(sync);
+  }
+  requestAnimationFrame(sync);
+})();
+
 function clearPlaceholderBackgrounds() {
   document.querySelectorAll(".project-template-hero-image-wrapper,.project-image-wrapper,.project-image-wrapper-2,.collection-item-4,.parallax-photo-wrapper,.big-photo,.small-photo,.w-slide,.fs-slider_slide").forEach(function (el) {
     var image = getComputedStyle(el).backgroundImage;
@@ -37,6 +50,10 @@ document.addEventListener(
     var consent = event.target.closest && event.target.closest(".consent-button");
     if (consent) {
       event.preventDefault();
+      try {
+        localStorage.setItem("yb-consent", consent.textContent.trim().toLowerCase() === "reject" ? "rejected" : "accepted");
+      } catch (e) {}
+      document.documentElement.classList.add("yb-consent-set");
       var banner = document.querySelector(".cookie-banner");
       if (banner) banner.style.display = "none";
       return;
