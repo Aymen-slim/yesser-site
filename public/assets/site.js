@@ -476,3 +476,42 @@ document.addEventListener(
   sync();
   requestAnimationFrame(sync);
 })();
+
+(function () {
+  var handle = "yesser.barka.photography";
+  var style = document.createElement("style");
+  style.textContent = [
+    ".yb-reach{display:flex;flex-direction:column;align-items:center;gap:0.85rem;width:100%;flex-basis:100%;margin:0.4rem 0 2.5rem}",
+    ".yb-reach a{display:inline-flex;align-items:center;gap:0.7rem;color:#0a090a;text-decoration:none;font-family:big-caslon-fb,sans-serif;font-size:1.05rem;line-height:1.2}",
+    ".yb-reach a:hover{opacity:0.62}",
+    ".yb-reach svg{width:1.35rem;height:1.35rem;flex:none;display:block}"
+  ].join("");
+  document.head.appendChild(style);
+
+  var instagram = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="17.4" cy="6.6" r="1" fill="currentColor"/></svg>';
+  var whatsapp = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12.04 3C7.31 3 3.47 6.84 3.47 11.57c0 1.5.39 2.96 1.14 4.25L3.4 21l5.32-1.16a8.6 8.6 0 0 0 3.32.66h.01c4.73 0 8.57-3.84 8.57-8.57S16.77 3 12.04 3zm4.97 12.16c-.21.58-1.22 1.11-1.68 1.18-.43.06-.97.09-1.57-.1-.36-.11-.82-.27-1.42-.53-2.5-1.08-4.12-3.6-4.24-3.77-.12-.17-1-1.33-1-2.54s.63-1.8.86-2.05c.22-.24.49-.3.65-.3h.47c.15 0 .35-.06.55.42.21.5.7 1.73.76 1.86.06.12.1.27.02.44-.08.17-.12.27-.24.42-.12.14-.25.32-.36.43-.12.12-.24.24-.1.47.14.23.62 1.02 1.33 1.65.91.81 1.68 1.07 1.92 1.19.24.12.38.1.52-.06.14-.17.6-.7.76-.94.16-.24.32-.2.54-.12.22.08 1.39.66 1.63.78.24.12.4.18.46.27.06.1.06.56-.15 1.14z"/></svg>';
+  document.querySelectorAll(".form-block.w-form").forEach(function (block) {
+    if (!block.parentElement || block.parentElement.querySelector(".yb-reach")) return;
+    var row = document.createElement("div");
+    row.className = "yb-reach";
+    row.innerHTML = '<a href="https://www.instagram.com/' + handle + '/" target="_blank" rel="noopener">' + instagram + "<span>" + handle + "</span></a>" + '<a href="https://wa.me/21646612828" target="_blank" rel="noopener">' + whatsapp + "<span>46 612 828</span></a>";
+    block.insertAdjacentElement("afterend", row);
+  });
+})();
+
+(function () {
+  var rows = document.querySelectorAll(".editorial-list-wrapper .editorial-project_component");
+  if (!rows.length) return;
+  var photos = document.querySelectorAll(".editorial-list-wrapper img.image-8");
+  rows.forEach(function (row) {
+    row.addEventListener("mouseover", function () {
+      var thumb = row.querySelector(".editorial-mobile-image");
+      if (!thumb) return;
+      var src = thumb.currentSrc || thumb.src;
+      photos.forEach(function (photo) {
+        if (photo.src !== src) photo.src = src;
+        photo.alt = thumb.alt;
+      });
+    });
+  });
+})();

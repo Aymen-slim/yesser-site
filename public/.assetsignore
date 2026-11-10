@@ -8,12 +8,24 @@
 !assets/home/hero/chayma-sami.jpg
 !assets/home/hero/laura-yosri.jpg
 !assets/home/hero/rami-cyrine.jpg
+!assets/home/hero/header-palms.jpg
+!assets/home/hero/header-walk.jpg
 # Homepage story photos.
+!assets/home/p01.jpg
 !assets/home/p02.jpg
+!assets/home/p06-arch.jpg
+!assets/home/p08-parasol.jpg
+!assets/home/p12-arcade.jpg
 !assets/home/p13.jpg
+!assets/home/p13-bride.jpg
 !assets/home/p14.jpg
+!assets/home/p14-veil.jpg
+!assets/home/p15-beach.jpg
+!assets/home/p16-gold.jpg
 !assets/home/p24.jpg
 !assets/home/p27.jpg
+!assets/home/portfolio-poster.jpg
+!assets/calendar/*.jpg
 *.jpeg
 *.png
 *.gif
@@ -28,6 +40,11 @@
 *.avif
 *.mp4
 *.MP4
+!assets/home/portfolio.mp4
+!assets/about/2.mp4
+!assets/about/c6729-half.mp4
+!assets/about/c6729-half.jpg
+!assets/stories/3.mp4
 *.webm
 *.mov
 *.avi
