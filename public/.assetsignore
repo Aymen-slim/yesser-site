@@ -40,6 +40,7 @@
 *.avif
 *.mp4
 *.MP4
+!assets/couples/fatma-idriss/header-wide.mp4
 !assets/home/portfolio.mp4
 !assets/about/2.mp4
 !assets/about/c6729-half.mp4

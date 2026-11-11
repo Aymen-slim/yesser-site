@@ -14,7 +14,8 @@ photoStyle.textContent = [
   "img.image-48{max-height:100svh!important}",
   "img.image-11{width:100%!important;height:auto!important;max-height:none!important}",
   "img.image-36{width:8.5rem!important;max-width:24vw!important;height:auto!important;max-height:16rem!important;object-fit:contain!important;aspect-ratio:auto!important}",
-  "a.footer-link.is-copyright:hover{text-decoration:underline!important}"
+  "a.footer-link.is-copyright:hover{text-decoration:underline!important}",
+  "@media (max-width:767px){label[for='Client-E-mail-2']{flex-basis:100%;width:100%;text-align:center}}"
 ].join("");
 document.head.appendChild(photoStyle);
 
@@ -67,21 +68,18 @@ if (document.readyState === "loading") {
   clearPlaceholderBackgrounds();
 }
 
+(function loadGtm() {
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+  var script = document.createElement("script");
+  script.async = true;
+  script.src = "https://www.googletagmanager.com/gtm.js?id=GTM-T2WFWCN8";
+  document.head.appendChild(script);
+})();
+
 document.addEventListener(
   "click",
   function (event) {
-    var consent = event.target.closest && event.target.closest(".consent-button");
-    if (consent) {
-      event.preventDefault();
-      try {
-        localStorage.setItem("yb-consent", consent.textContent.trim().toLowerCase() === "reject" ? "rejected" : "accepted");
-      } catch (e) {}
-      document.documentElement.classList.add("yb-consent-set");
-      var banner = document.querySelector(".cookie-banner");
-      if (banner) banner.style.display = "none";
-      return;
-    }
-
     var send = event.target.closest && event.target.closest("form.form a.cta");
     if (!send) return;
     event.preventDefault();
